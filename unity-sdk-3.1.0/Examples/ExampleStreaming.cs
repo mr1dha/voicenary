@@ -35,7 +35,7 @@ namespace IBM.Watsson.Examples
         [SerializeField]
         private string _serviceUrl;
         [Tooltip("Text field to display the results of streaming.")]
-        public Text ResultsField;
+        public Text questionText;
         [Header("IAM Authentication")]
         [Tooltip("The IAM apikey.")]
         [SerializeField]
@@ -57,10 +57,15 @@ namespace IBM.Watsson.Examples
 
         private SpeechToTextService _service;
 
+        private QuestionController question;
+
         void Start()
         {
+            question = new  QuestionController();
             LogSystem.InstallDefaultReactors();
             Runnable.Run(CreateService());
+
+            questionText.text = question.Question;
         }
 
         private IEnumerator CreateService()
@@ -144,12 +149,12 @@ namespace IBM.Watsson.Examples
         {
             Active = false;
 
-            Log.Debug("ExampleStreaming.OnError()", "Error! {0}", error);
+            // Log.Debug("ExampleStreaming.OnError()", "Error! {0}", error);s
         }
 
         private IEnumerator RecordingHandler()
         {
-            Log.Debug("ExampleStreaming.RecordingHandler()", "devices: {0}", Microphone.devices);
+            // Log.Debug("ExampleStreaming.RecordingHandler()", "devices: {0}", Microphone.devices);
             _recording = Microphone.Start(_microphoneID, true, _recordingBufferSize, _recordingHZ);
             yield return null;      // let _recordingRoutine get set..
 
@@ -214,31 +219,38 @@ namespace IBM.Watsson.Examples
                     foreach (var alt in res.alternatives)
                     {
                         string text = string.Format("{0} ({1}, {2:0.00})\n", alt.transcript, res.final ? "Final" : "Interim", alt.confidence);
-                        Log.Debug("ExampleStreaming.OnRecognize()", text);
-                        if(alt.transcript.Contains("apple") || alt.transcript.Contains("book")){
-                            Debug.Log("SYSTEM FOUND!");
-                            Debug.Log(Time.time * 1000);
+                        // Log.Debug("ExampleStreaming.OnRecognize()", text);
+
+//Game Logic is Here!
+                        if(question.Question != null){
+                            if(alt.transcript.ToLower().Contains(question.Question)){
+                                Debug.Log("SYSTEM FOUND " + question.Question);
+                                question.CurrentQuestion++;
+                                questionText.text = question.Question;
+                            }
+                        }else{
+                            EndOfTheGame();
+                            break;
                         }
-                        ResultsField.text = text;
                     }
 
-                    if (res.keywords_result != null && res.keywords_result.keyword != null)
-                    {
-                        foreach (var keyword in res.keywords_result.keyword)
-                        {
-                            Log.Debug("ExampleStreaming.OnRecognize()", "keyword: {0}, confidence: {1}, start time: {2}, end time: {3}", keyword.normalized_text, keyword.confidence, keyword.start_time, keyword.end_time);
-                        }
-                    }
+                    // if (res.keywords_result != null && res.keywords_result.keyword != null)
+                    // {
+                    //     foreach (var keyword in res.keywords_result.keyword)
+                    //     {
+                    //         Log.Debug("ExampleStreaming.OnRecognize()", "keyword: {0}, confidence: {1}, start time: {2}, end time: {3}", keyword.normalized_text, keyword.confidence, keyword.start_time, keyword.end_time);
+                    //     }
+                    // }
 
-                    if (res.word_alternatives != null)
-                    {
-                        foreach (var wordAlternative in res.word_alternatives)
-                        {
-                            Log.Debug("ExampleStreaming.OnRecognize()", "Word alternatives found. Start time: {0} | EndTime: {1}", wordAlternative.start_time, wordAlternative.end_time);
-                            foreach (var alternative in wordAlternative.alternatives)
-                                Log.Debug("ExampleStreaming.OnRecognize()", "\t word: {0} | confidence: {1}", alternative.word, alternative.confidence);
-                        }
-                    }
+                    // if (res.word_alternatives != null)
+                    // {
+                    //     foreach (var wordAlternative in res.word_alternatives)
+                    //     {
+                    //         Log.Debug("ExampleStreaming.OnRecognize()", "Word alternatives found. Start time: {0} | EndTime: {1}", wordAlternative.start_time, wordAlternative.end_time);
+                    //         foreach (var alternative in wordAlternative.alternatives)
+                    //             Log.Debug("ExampleStreaming.OnRecognize()", "\t word: {0} | confidence: {1}", alternative.word, alternative.confidence);
+                    //     }
+                    // }
                 }
             }
         }
@@ -249,9 +261,13 @@ namespace IBM.Watsson.Examples
             {
                 foreach (SpeakerLabelsResult labelResult in result.speaker_labels)
                 {
-                    Log.Debug("ExampleStreaming.OnRecognizeSpeaker()", string.Format("speaker result: {0} | confidence: {3} | from: {1} | to: {2}", labelResult.speaker, labelResult.from, labelResult.to, labelResult.confidence));
+                    // Log.Debug("ExampleStreaming.OnRecognizeSpeaker()", string.Format("speaker result: {0} | confidence: {3} | from: {1} | to: {2}", labelResult.speaker, labelResult.from, labelResult.to, labelResult.confidence));
                 }
             }
+        }
+
+        private void EndOfTheGame(){
+            Debug.Log("GAME OVER");
         }
     }
 }
