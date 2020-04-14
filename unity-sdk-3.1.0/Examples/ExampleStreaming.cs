@@ -221,7 +221,7 @@ namespace IBM.Watsson.Examples
                         string text = string.Format("{0} ({1}, {2:0.00})\n", alt.transcript, res.final ? "Final" : "Interim", alt.confidence);
                         // Log.Debug("ExampleStreaming.OnRecognize()", text);
 
-//Game Logic is Here!
+                        /*Ini adalah Game Logic untuk mengecek hasil recognition dengan soal*/
                         if(question.Question != null){
                             if(alt.transcript.ToLower().Contains(question.Question)){
                                 Debug.Log("SYSTEM FOUND " + question.Question);

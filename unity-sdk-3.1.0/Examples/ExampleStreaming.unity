@@ -255,6 +255,11 @@ Prefab:
       propertyPath: m_Name
       value: VoiceRecognitionManager
       objectReference: {fileID: 0}
+    - target: {fileID: 114033596716171498, guid: 6fd61fa13fee6b44ab7edd68c42ba7e8,
+        type: 2}
+      propertyPath: questionText
+      value: 
+      objectReference: {fileID: 1863902092}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6fd61fa13fee6b44ab7edd68c42ba7e8, type: 2}
   m_IsPrefabAsset: 0
@@ -332,8 +337,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1368784803}
-  - component: {fileID: 1368784802}
-  - component: {fileID: 1368784801}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -341,29 +344,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1368784801
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1368784800}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 970dea75e6ac98c4cbbb1b3c9503c2ad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1368784802
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1368784800}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 990541184bb29da4b80a98786bf9a528, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  recognizedText: {fileID: 1863902092}
 --- !u!4 &1368784803
 Transform:
   m_ObjectHideFlags: 0
